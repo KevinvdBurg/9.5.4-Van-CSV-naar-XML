@@ -103,7 +103,7 @@ namespace CSVToXML
                 }
 
                 xmlData.Add("</Players>");
-                File.WriteAllLines(@"C:\Users\milton\Players.xml", xmlData.ToArray());
+                File.WriteAllLines("Players.xml", xmlData.ToArray());
             }
             catch (Exception exception)
             {
