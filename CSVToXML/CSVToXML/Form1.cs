@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,21 +15,32 @@ using System.Xml.Linq;
 
 namespace CSVToXML
 {
-    public partial class frmCSVToXML : Form
+    public partial class FrmCsvToXml : Form
     {
-        private List<string> headers = new List<string>();
-        private int headerCounter = 0;
+        //FIELDS
+        private FileStream csvFileStream;
+        private FileStream xmlFileStream;
+
+        private StreamReader csvStreamReader;
+
+        private List<string> xmlData = new List<string>();
 
         //CONSTRUCTORS
-        public frmCSVToXML()
+        public FrmCsvToXml()
         {
             InitializeComponent();
 
-            headers.Add("Player_Name");
-            headers.Add("DollarBankroll");
-            headers.Add("EuroBankroll");
-            headers.Add("DollarMakeup");
-            headers.Add("EuroMakeup");
+            try
+            {
+                csvFileStream = new FileStream("Players.csv", FileMode.Open, FileAccess.Read);
+                xmlFileStream = new FileStream("Players.xml", FileMode.Create, FileAccess.Write);
+
+                csvStreamReader = new StreamReader(csvFileStream);
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
 
         //METHODS
@@ -36,15 +48,90 @@ namespace CSVToXML
         {
             try
             {
-                var lines = File.ReadAllLines("Players.csv");
+                string regel = csvStreamReader.ReadLine();
 
-                var xml = new XElement("TopElement", lines.Select(line => new XElement("Item", line.Split(',').Select((column, index) => new XElement(headers[headerCounter], column)))));
+                xmlData.Add("<Players>");
 
-                xml.Save("Players.xml");
+                while (regel != null)
+                {
+                    int columnCounter = 0;
+                    string[] regelSplit = regel.Split(',');
+
+                    xmlData.Add("\t<Player>");
+                    foreach (string column in regelSplit)
+                    {
+                        string columnName;
+                        if (columnCounter == 0)
+                        {
+                            columnName = "Player_Name";
+                        }
+                        else if (columnCounter == 1)
+                        {
+                            columnName = "DollarBankroll";
+                        }
+                        else if (columnCounter == 2)
+                        {
+                            columnName = "EuroBankroll";
+                        }
+                        else if (columnCounter == 3)
+                        {
+                            columnName = "DollarMakeup";
+                        }
+                        else if (columnCounter == 4)
+                        {
+                            columnName = "EuroMakeup";
+                        }
+                        else
+                        {
+                            columnName = "ERROR";
+                        }
+                        xmlData.Add("\t\t<" + columnName + ">" + column + "</" + columnName + ">");
+
+                        if (columnCounter < 4)
+                        {
+                            columnCounter++;
+                        }
+                        else
+                        {
+                            columnCounter = 0;
+                        }
+                    }
+
+                    xmlData.Add("\t</Player>");
+
+                    regel = csvStreamReader.ReadLine();
+                }
+
+                xmlData.Add("</Players>");
+                File.WriteAllLines(@"C:\Users\milton\Players.xml", xmlData.ToArray());
             }
-            catch (Exception b)
+            catch (Exception exception)
             {
-                throw b;
+                throw exception;
+            }
+            finally
+            {
+                try
+                {
+                    csvStreamReader.Close();
+                }
+                catch (Exception exception)
+                {
+
+                    throw exception;
+                }
+                finally
+                {
+                    try
+                    {
+                        xmlFileStream.Close();
+                        csvFileStream.Close();
+                    }
+                    catch (Exception exception)
+                    {
+                        throw exception;
+                    }
+                }
             }
         }
     }
