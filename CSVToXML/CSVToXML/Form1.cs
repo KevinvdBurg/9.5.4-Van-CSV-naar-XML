@@ -111,7 +111,7 @@ namespace CSVToXML
                 }
 
                 xmlData.Add("</Players>");
-                File.WriteAllLines("Players.xml", xmlData.ToArray());
+                File.WriteAllLines(directory.Replace(".csv", ".xml"), xmlData.ToArray());
             }
             catch (Exception exception)
             {
