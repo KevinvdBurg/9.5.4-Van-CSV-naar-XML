@@ -24,6 +24,7 @@ namespace CSVToXML
         private StreamReader csvStreamReader;
 
         private List<string> xmlData = new List<string>();
+        private string directory;
 
         //CONSTRUCTORS
         public FrmCsvToXml()
@@ -32,8 +33,15 @@ namespace CSVToXML
 
             try
             {
-                csvFileStream = new FileStream("Players.csv", FileMode.Open, FileAccess.Read);
-                xmlFileStream = new FileStream("Players.xml", FileMode.Create, FileAccess.Write);
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "Players|*.csv";
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    directory = openFileDialog1.FileName;
+                }
+
+                csvFileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                xmlFileStream = new FileStream(directory.Replace(".csv", ".xml"), FileMode.Create, FileAccess.Write);
 
                 csvStreamReader = new StreamReader(csvFileStream);
             }
