@@ -33,6 +33,7 @@ namespace CSVToXML
 
             try
             {
+                MessageBox.Show("Select Players.csv");
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Players|*.csv";
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -41,7 +42,6 @@ namespace CSVToXML
                 }
 
                 csvFileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
-                xmlFileStream = new FileStream(directory.Replace(".csv", ".xml"), FileMode.Create, FileAccess.Write);
 
                 csvStreamReader = new StreamReader(csvFileStream);
             }
@@ -132,7 +132,6 @@ namespace CSVToXML
                 {
                     try
                     {
-                        xmlFileStream.Close();
                         csvFileStream.Close();
                     }
                     catch (Exception exception)
