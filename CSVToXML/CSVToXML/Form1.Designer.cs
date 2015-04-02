@@ -1,6 +1,6 @@
 ﻿namespace CSVToXML
 {
-    partial class frmCSVToXML
+    partial class FrmCsvToXml
     {
         /// <summary>
         /// Required designer variable.

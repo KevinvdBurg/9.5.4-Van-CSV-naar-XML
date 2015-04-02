@@ -16,7 +16,7 @@ namespace CSVToXML
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmCSVToXML());
+            Application.Run(new FrmCsvToXml());
         }
     }
 }
